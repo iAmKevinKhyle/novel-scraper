@@ -3,9 +3,16 @@ import * as cheerio from "cheerio";
 
 const url = "https://novelbin.me/";
 
+const config = {
+  headers: {
+    "User-Agent":
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+  },
+};
+
 // ALL GENRES
 export const GENRES = (req, res, next) => {
-  axios(url)
+  axios(url, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -33,7 +40,7 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
   const req_genre = req.params.genre;
   const req_page = req.params.page;
 
-  axios(url + "novelbin-genres/" + req_genre + "?page=" + req_page)
+  axios(url + "novelbin-genres/" + req_genre + "?page=" + req_page, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
