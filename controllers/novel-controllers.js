@@ -230,7 +230,7 @@ export const GET_NOVEL_DESC = (req, res, next) => {
 export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
   const { link } = req.body;
 
-  axios(link)
+  axios(link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"))
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -273,7 +273,7 @@ export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
 export const GET_CHAPTER_CONTENTS = (req, res, next) => {
   const { link } = req.body;
 
-  axios(link)
+  axios(link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"))
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
