@@ -24,7 +24,7 @@ export const GENRES = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -67,7 +67,7 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {

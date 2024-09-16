@@ -24,7 +24,7 @@ export const HOT_NOVELS = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -64,7 +64,7 @@ export const LATEST_NOVELS = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -113,7 +113,7 @@ export const COMPLETED_NOVELS = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -163,7 +163,7 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -230,7 +230,7 @@ export const GET_NOVEL_DESC = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -324,7 +324,7 @@ export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -382,7 +382,7 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -422,7 +422,7 @@ export const GET_ALL_HOT_NOVELS = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -488,7 +488,7 @@ export const GET_ALL_LATEST_NOVELS = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
@@ -554,7 +554,7 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
         "Sec-Fetch-Dest:": "document",
         "Sec-Fetch-Mode:": "navigate",
         "Sec-Fetch-User:": "?1",
-        "Sec-Fetch-Site:": "none",
+        "Sec-Fetch-Site:": "same-origin",
       },
     })
     .then((response) => {
