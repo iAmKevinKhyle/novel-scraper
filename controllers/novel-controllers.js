@@ -22,7 +22,8 @@ const config = {
 
 // GET THE HOTTEST NOVELS
 export const HOT_NOVELS = (req, res, next) => {
-  axios(url, config)
+  axios
+    .get(url, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -47,7 +48,8 @@ export const HOT_NOVELS = (req, res, next) => {
 
 // GET LATEST NOVELS
 export const LATEST_NOVELS = (req, res, next) => {
-  axios(url, config)
+  axios
+    .get(url, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -81,7 +83,8 @@ export const LATEST_NOVELS = (req, res, next) => {
 
 // GET COMPLETED NOVELS
 export const COMPLETED_NOVELS = (req, res, next) => {
-  axios(url, config)
+  axios
+    .get(url, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -116,7 +119,8 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
     newUrl = url + "search?keyword=" + newKey;
   }
 
-  axios(newUrl, config)
+  axios
+    .get(newUrl, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -168,7 +172,8 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
 export const GET_NOVEL_DESC = (req, res, next) => {
   const { link } = req.body;
 
-  axios(link, config)
+  axios
+    .get(link, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -247,10 +252,11 @@ export const GET_NOVEL_DESC = (req, res, next) => {
 export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
   const { link } = req.body;
 
-  axios(
-    link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"),
-    config
-  )
+  axios
+    .get(
+      link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"),
+      config
+    )
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -293,10 +299,11 @@ export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
 export const GET_CHAPTER_CONTENTS = (req, res, next) => {
   const { link } = req.body;
 
-  axios(
-    link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"),
-    config
-  )
+  axios
+    .get(
+      link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"),
+      config
+    )
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -321,7 +328,8 @@ export const GET_ALL_HOT_NOVELS = (req, res, next) => {
   const { page } = req.params;
   const hot_url = "https://novelbin.me/sort/novelbin-hot";
 
-  axios(hot_url + "?page=" + page, config)
+  axios
+    .get(hot_url + "?page=" + page, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -372,7 +380,8 @@ export const GET_ALL_LATEST_NOVELS = (req, res, next) => {
   const { page } = req.params;
   const latest_url = "https://novelbin.me/sort/novelbin-daily-update";
 
-  axios(latest_url + "?page=" + page, config)
+  axios
+    .get(latest_url + "?page=" + page, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -423,7 +432,8 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
   const { page } = req.params;
   const completed_url = "https://novelbin.me/sort/novelbin-complete";
 
-  axios(completed_url + "?page=" + page, config)
+  axios
+    .get(completed_url + "?page=" + page, config)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -475,7 +485,7 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
 // export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
 //   const { link } = req.body;
 
-//   axios(link + "#tab-chapters-title")
+//   axios.get(link + "#tab-chapters-title")
 //     .then((response) => {
 //       const html = response.data;
 //       const $ = cheerio.load(html);
