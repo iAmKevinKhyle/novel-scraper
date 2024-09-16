@@ -14,12 +14,18 @@ export const GENRES = (req, res, next) => {
   axios
     .get(url, {
       headers: {
-        "user-agent": agents[Math.floor(Math.random() * agents.length)],
-        "upgrade-insecure-requests": "1",
-        accept:
+        "User-Agent": agents[Math.floor(Math.random() * agents.length)],
+        Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
-        "accept-encoding": "gzip, deflate, br",
-        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9,en;q=0.8",
+        Referer: url,
+        Connection: "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest:": "document",
+        "Sec-Fetch-Mode:": "navigate",
+        "Sec-Fetch-User:": "?1",
+        "Sec-Fetch-Site:": "none",
       },
     })
     .then((response) => {
@@ -52,12 +58,18 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
   axios
     .get(url + "novelbin-genres/" + req_genre + "?page=" + req_page, {
       headers: {
-        "user-agent": agents[Math.floor(Math.random() * agents.length)],
-        "upgrade-insecure-requests": "1",
-        accept:
+        "User-Agent": agents[Math.floor(Math.random() * agents.length)],
+        Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
-        "accept-encoding": "gzip, deflate, br",
-        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9,en;q=0.8",
+        Referer: url,
+        Connection: "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest:": "document",
+        "Sec-Fetch-Mode:": "navigate",
+        "Sec-Fetch-User:": "?1",
+        "Sec-Fetch-Site:": "none",
       },
     })
     .then((response) => {
