@@ -9,21 +9,19 @@ const agents = [
   "Mozilla/5.0 (X11; Linux x86_64; rv:107.0) Gecko/20100101 Firefox/107.0",
 ];
 
-const config = {
-  headers: {
-    "user-agent": agents[Math.floor(Math.random() * agents.length)],
-    "upgrade-insecure-requests": "1",
-    accept:
-      "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
-    "accept-encoding": "gzip, deflate, br",
-    "accept-language": "en-US,en;q=0.9,en;q=0.8",
-  },
-};
-
 // GET THE HOTTEST NOVELS
 export const HOT_NOVELS = (req, res, next) => {
   axios
-    .get(url, config)
+    .get(url, {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -43,13 +41,22 @@ export const HOT_NOVELS = (req, res, next) => {
 
       res.status(200).json(hot);
     })
-    .catch((err) => res.status(403).json({ error: err }));
+    .catch((err) => res.json({ itoError: err }));
 };
 
 // GET LATEST NOVELS
 export const LATEST_NOVELS = (req, res, next) => {
   axios
-    .get(url, config)
+    .get(url, {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -84,7 +91,16 @@ export const LATEST_NOVELS = (req, res, next) => {
 // GET COMPLETED NOVELS
 export const COMPLETED_NOVELS = (req, res, next) => {
   axios
-    .get(url, config)
+    .get(url, {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -120,7 +136,16 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
   }
 
   axios
-    .get(newUrl, config)
+    .get(newUrl, {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -173,7 +198,16 @@ export const GET_NOVEL_DESC = (req, res, next) => {
   const { link } = req.body;
 
   axios
-    .get(link, config)
+    .get(link, {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -253,10 +287,16 @@ export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
   const { link } = req.body;
 
   axios
-    .get(
-      link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"),
-      config
-    )
+    .get(link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"), {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -300,10 +340,16 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
   const { link } = req.body;
 
   axios
-    .get(
-      link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"),
-      config
-    )
+    .get(link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"), {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -329,7 +375,16 @@ export const GET_ALL_HOT_NOVELS = (req, res, next) => {
   const hot_url = "https://novelbin.me/sort/novelbin-hot";
 
   axios
-    .get(hot_url + "?page=" + page, config)
+    .get(hot_url + "?page=" + page, {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -381,7 +436,16 @@ export const GET_ALL_LATEST_NOVELS = (req, res, next) => {
   const latest_url = "https://novelbin.me/sort/novelbin-daily-update";
 
   axios
-    .get(latest_url + "?page=" + page, config)
+    .get(latest_url + "?page=" + page, {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -433,7 +497,16 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
   const completed_url = "https://novelbin.me/sort/novelbin-complete";
 
   axios
-    .get(completed_url + "?page=" + page, config)
+    .get(completed_url + "?page=" + page, {
+      headers: {
+        "user-agent": agents[Math.floor(Math.random() * agents.length)],
+        "upgrade-insecure-requests": "1",
+        accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
