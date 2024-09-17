@@ -12,13 +12,10 @@ const agents = [
 
 // GET THE HOTTEST NOVELS
 export const HOT_NOVELS = (req, res, next) => {
-  const agent = agents[Math.floor(Math.random() * agents.length)];
-  console.log(agent);
-
   axios
     .get(url, {
       headers: {
-        "User-Agent": agent,
+        "User-Agent": agents[Math.floor(Math.random() * agents.length)],
         Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
         "Accept-Encoding": "gzip, deflate, br",
@@ -44,7 +41,7 @@ export const HOT_NOVELS = (req, res, next) => {
 
       res.status(200).json(hot);
     })
-    .catch((err) => res.json({ error: err }));
+    .catch((err) => res.status(403).json({ error: err }));
 };
 
 // GET LATEST NOVELS
@@ -548,37 +545,37 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
     .catch((err) => res.status(403).json({ error: err }));
 };
 
-// ! WARNING: DO NOT REMOVE
-// export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
-//   const { link } = req.body;
+// ? GET FIRST 30 CHAPTERS OF THE NOVEL
+export const GET_THIRTY_CHAPTERS = (req, res, next) => {
+  const { link } = req.body;
 
-//   axios.get(link + "#tab-chapters-title")
-//     .then((response) => {
-//       const html = response.data;
-//       const $ = cheerio.load(html);
-//       // const novel_chapters = [];
+  axios
+    .get(link + "#tab-chapters-title", {
+      headers: {
+        "User-Agent": agents[Math.floor(Math.random() * agents.length)],
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9,en;q=0.8",
+      },
+    })
+    .then((response) => {
+      const html = response.data;
+      const $ = cheerio.load(html);
+      const novel_chapters = [];
 
-//       // ? 30 CHAPTERS ONLY
-//       // $(".list-chapter > li > a", html).each(function () {
-//       //   const title = $(this).text().replaceAll("\n", "");
-//       //   const link = $(this).attr("href");
+      // ? 30 CHAPTERS ONLY
+      $(".list-chapter > li > a", html).each(function () {
+        const chapter = $(this).text().replaceAll("\n", "");
+        const link = $(this).attr("href");
 
-//       //   novel_chapters.push({
-//       //     title,
-//       //     link,
-//       //   });
-//       // });
+        novel_chapters.push({
+          chapter,
+          link,
+        });
+      });
 
-//       // ? 1st CHAPTER ONLY
-//       // novel_chapters.push({
-//       //   title: $(".list-chapter > li > a", html)
-//       //     .first()
-//       //     .text()
-//       //     .replaceAll("\n", ""),
-//       //   link: $(".list-chapter > li > a", html).first().attr("href"),
-//       // });
-
-//       // res.status(200).json(novel_chapters);
-//     })
-//     .catch((err) => res.status(403).json({ error: err }));
-// };
+      res.status(200).json(novel_chapters);
+    })
+    .catch((err) => res.status(403).json({ error: err }));
+};
