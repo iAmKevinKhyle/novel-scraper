@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 
-const url = "https://novelbin.me/";
+const url = "https://novelfull.net";
 
 const agents = [
   "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36,gzip(gfe)",
@@ -30,12 +30,12 @@ export const HOT_NOVELS = (req, res, next) => {
       $(".item", html).each(function () {
         const title = $(this).find("img").attr("alt");
         const link = $(this).find("a").attr("href");
-        const img = $(this).find("img").attr("data-src");
+        const img = $(this).find("img").attr("src");
 
         hot.push({
           title,
-          link,
-          img,
+          link: url + link,
+          img: url + img,
         });
       });
 
@@ -61,10 +61,10 @@ export const LATEST_NOVELS = (req, res, next) => {
       const $ = cheerio.load(html);
       const latest = [];
 
-      $(".list.index-novel > .row", html).each(function () {
+      $(".list.index-intro > .row", html).each(function () {
         const title = $(this).find("h3").text();
         const link = $(this).find("a").attr("href");
-        const genres = $(this).find(".col-genre").text();
+        const genres = $(this).find(".col-cat").text();
         const latest_chapter = $(this).find(".text-info").text();
         const latest_chapter_link = $(this)
           .find(".text-info")
@@ -74,10 +74,10 @@ export const LATEST_NOVELS = (req, res, next) => {
 
         latest.push({
           title,
-          link,
+          link: url + link,
           genres,
           latest_chapter,
-          latest_chapter_link,
+          latest_chapter_link: url + latest_chapter_link,
           update_time,
         });
       });
@@ -104,16 +104,16 @@ export const COMPLETED_NOVELS = (req, res, next) => {
       const $ = cheerio.load(html);
       const completed = [];
 
-      $(".list.list-thumb > .row a", html).each(function () {
+      $(".list.list-thumbnail > .row a", html).each(function () {
         const title = $(this).attr("title");
         const link = $(this).attr("href");
-        const img = $(this).find("img").attr("data-src");
+        const img = $(this).find("img").attr("src");
         const count = $(this).find("small").text();
 
         completed.push({
           title,
-          link,
-          img,
+          link: url + link,
+          img: url + img,
           count,
         });
       });
@@ -128,7 +128,7 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
   const key = req.params.key;
   const page = req.params.page;
   const newKey = key.replaceAll(" ", "+");
-  let newUrl = url + "search?keyword=" + newKey + "&page=" + page;
+  let newUrl = url + "/search?keyword=" + newKey + "&page=" + page;
   if (page === 1) {
     newUrl = url + "search?keyword=" + newKey;
   }
@@ -147,12 +147,21 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
       const html = response.data;
       const $ = cheerio.load(html);
       const search_req = [];
-      const pagination = parseInt($("li.last > a").attr("href").split("=")[2]);
+      let pagination = $(".pagination-container")
+        ?.find(".last > a")
+        .attr("href")
+        ?.split("page=")[1];
 
-      search_req.push({ pagination });
+      if (pagination === undefined) {
+        pagination = $(".pagination-container")
+          ?.find("ul.pagination-sm > li:nth-of-type(9)")
+          .text();
+      }
 
-      $(".list.list-novel > .row", html).each(function () {
-        const title = $(this).find(".novel-title").text();
+      search_req.push({ pagination: parseInt(pagination) });
+
+      $(".list.list-truyen > .row", html).each(function () {
+        const title = $(this).find(".truyen-title").text();
         const link = $(this).find("a").attr("href");
         const author = $(this).find("span.author").text();
         const img = $(this).find("img").attr("src");
@@ -176,10 +185,10 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
         } else {
           search_req.push({
             title,
-            link,
+            link: url + link,
             author,
-            img,
-            latest_chapter,
+            img: url + img,
+            latest_chapter: url + latest_chapter,
             latest_chapter_title,
           });
         }
@@ -209,38 +218,34 @@ export const GET_NOVEL_DESC = (req, res, next) => {
       const $ = cheerio.load(html);
       const novel_description = [];
 
-      $(".col-novel-main", html).each(function () {
-        const img = $(this).find("img.lazy").attr("data-src");
-        const title = $(this).find("img.lazy").attr("alt");
+      $(".col-truyen-main", html).each(function () {
+        const img = url + $(this).find("img").attr("src");
+        const title = $(this).find("img").attr("alt");
         const description = $(this)
           .find("div.desc-text")
           .text()
           .replaceAll("\n", "");
 
         const latest_chapter = $(this)
-          .find(".item-value")
+          .find("ul.l-chapters > li:first-of-type > a")
           .text()
           .replaceAll("\n", "");
-        let latest_chapter_link = $(this).find(".item-value > a").attr("href");
-        latest_chapter_link =
-          "https://novelsbin.novelmagic.org/book/" +
-          latest_chapter_link.split("/")[4] +
-          "/" +
-          latest_chapter_link.split("/")[5];
-        const update_time = $(this).find(".item-time").text();
+        const latest_chapter_link =
+          url +
+          $(this).find("ul.l-chapters > li:first-of-type > a").attr("href");
+        const update_time = "";
 
-        const first_chapter_title = $(".list-chapter > li > a", html)
+        const first_chapter_title = $(this)
+          .find("ul.list-chapter > li:first-of-type > a")
           .first()
           .text()
           .replaceAll("\n", "");
-        let first_chapter_link = $(".list-chapter > li > a", html)
-          .first()
-          .attr("href");
-        first_chapter_link =
-          "https://novelsbin.novelmagic.org/book/" +
-          first_chapter_link.split("/")[4] +
-          "/" +
-          first_chapter_link.split("/")[5];
+        const first_chapter_link =
+          url +
+          $(this)
+            .find("ul.list-chapter > li:first-of-type > a")
+            .first()
+            .attr("href");
 
         novel_description.push({
           id: "",
@@ -256,7 +261,7 @@ export const GET_NOVEL_DESC = (req, res, next) => {
         });
 
         $(this)
-          .find("ul.info.info-meta > li")
+          .find(".info-holder > .info > div")
           .each(function () {
             const label = $(this).text().split(":")[0].trim();
             const value = $(this).text().split(":")[1].trim();
@@ -266,8 +271,11 @@ export const GET_NOVEL_DESC = (req, res, next) => {
               value: value.replace("See more »", "").replaceAll("\n", ""),
             });
 
-            if (label == "Year of publishing") {
-              const id = title.replaceAll(" ", "").toLowerCase() + value;
+            if (label == "Author") {
+              const id =
+                title.replaceAll(" ", "").toLowerCase() +
+                "_" +
+                value.replaceAll(" ", "").replaceAll(",", "_").toLowerCase();
               novel_description[0].id = id;
             }
           });
@@ -283,7 +291,7 @@ export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
   const { link } = req.body;
 
   axios
-    .get(link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"), {
+    .get(link, {
       headers: {
         "User-Agent": agents[Math.floor(Math.random() * agents.length)],
         Accept:
@@ -298,11 +306,11 @@ export const GET_PREV_NEXT_CHAPTER = (req, res, next) => {
       const navigation_links = [];
 
       let prev_isDisabled = $("#prev_chap", html).attr("disabled");
-      let prev_link = $("#prev_chap", html).attr("href");
+      let prev_link = url + $("#prev_chap", html).attr("href");
       let prev_title = $("#prev_chap", html).attr("title");
 
       let next_isDisabled = $("#next_chap", html).attr("disabled");
-      let next_link = $("#next_chap", html).attr("href");
+      let next_link = url + $("#next_chap", html).attr("href");
       let next_title = $("#next_chap", html).attr("title");
 
       prev_isDisabled === undefined
@@ -335,7 +343,7 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
   const { link } = req.body;
 
   axios
-    .get(link.replace("novelsbin.novelmagic.org", "novelbin.phieuvu.com"), {
+    .get(link, {
       headers: {
         "User-Agent": agents[Math.floor(Math.random() * agents.length)],
         Accept:
@@ -350,7 +358,7 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
       const chapter_contents = [];
       let count = 0;
 
-      $("#chr-content > p", html).each(function () {
+      $("#chapter-content > p", html).each(function () {
         count++;
 
         chapter_contents.push({
@@ -366,7 +374,7 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
 // ? function that will fetch all latest/hot/completed novels along with their pagination pages count
 export const GET_ALL_HOT_NOVELS = (req, res, next) => {
   const { page } = req.params;
-  const hot_url = "https://novelbin.me/sort/novelbin-hot";
+  const hot_url = "https://novelfull.net/hot-novel";
 
   axios
     .get(hot_url + "?page=" + page, {
@@ -382,19 +390,26 @@ export const GET_ALL_HOT_NOVELS = (req, res, next) => {
       const html = response.data;
       const $ = cheerio.load(html);
       const hot_novels = [];
-      const pagination = parseInt($("li.last > a").attr("href").split("=")[1]);
+      let pagination = $(".pagination-container")
+        ?.find(".last > a")
+        .attr("href")
+        ?.split("page=")[1];
 
-      hot_novels.push({ pagination });
+      if (pagination === undefined) {
+        pagination = $(".pagination-container")
+          ?.find("ul.pagination-sm > li:nth-of-type(9)")
+          .text();
+      }
 
-      $(".list.list-novel > .row", html).each(function () {
-        const title = $(this).find(".novel-title").text();
-        const link = $(this).find("a").attr("href");
+      hot_novels.push({ pagination: parseInt(pagination) });
+
+      $(".list.list-truyen > .row", html).each(function () {
+        const title = $(this).find(".truyen-title").text();
+        const link = url + $(this).find(".truyen-title > a").attr("href");
         const author = $(this).find("span.author").text();
-        const img = $(this).find("img").attr("data-src");
-        const latest_chapter = $(this)
-          .find(".text-info")
-          .find("a")
-          .attr("href");
+        const img = url + $(this).find("img").attr("src");
+        const latest_chapter =
+          url + $(this).find(".text-info").find("a").attr("href");
         const latest_chapter_title = $(this)
           .find(".text-info")
           .find("a")
@@ -426,7 +441,7 @@ export const GET_ALL_HOT_NOVELS = (req, res, next) => {
 };
 export const GET_ALL_LATEST_NOVELS = (req, res, next) => {
   const { page } = req.params;
-  const latest_url = "https://novelbin.me/sort/novelbin-daily-update";
+  const latest_url = "https://novelfull.net/latest-release-novel";
 
   axios
     .get(latest_url + "?page=" + page, {
@@ -442,19 +457,26 @@ export const GET_ALL_LATEST_NOVELS = (req, res, next) => {
       const html = response.data;
       const $ = cheerio.load(html);
       const latest_novels = [];
-      const pagination = parseInt($("li.last > a").attr("href").split("=")[1]);
+      let pagination = $(".pagination-container")
+        ?.find(".last > a")
+        .attr("href")
+        ?.split("page=")[1];
 
-      latest_novels.push({ pagination });
+      if (pagination === undefined) {
+        pagination = $(".pagination-container")
+          ?.find("ul.pagination-sm > li:nth-of-type(9)")
+          .text();
+      }
 
-      $(".list.list-novel > .row", html).each(function () {
-        const title = $(this).find(".novel-title").text();
-        const link = $(this).find("a").attr("href");
+      latest_novels.push({ pagination: parseInt(pagination) });
+
+      $(".list.list-truyen > .row", html).each(function () {
+        const title = $(this).find(".truyen-title").text();
+        const link = url + $(this).find(".truyen-title > a").attr("href");
         const author = $(this).find("span.author").text();
-        const img = $(this).find("img").attr("data-src");
-        const latest_chapter = $(this)
-          .find(".text-info")
-          .find("a")
-          .attr("href");
+        const img = url + $(this).find("img").attr("src");
+        const latest_chapter =
+          url + $(this).find(".text-info").find("a").attr("href");
         const latest_chapter_title = $(this)
           .find(".text-info")
           .find("a")
@@ -486,7 +508,7 @@ export const GET_ALL_LATEST_NOVELS = (req, res, next) => {
 };
 export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
   const { page } = req.params;
-  const completed_url = "https://novelbin.me/sort/novelbin-complete";
+  const completed_url = "https://novelfull.net/completed-novel";
 
   axios
     .get(completed_url + "?page=" + page, {
@@ -502,30 +524,32 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
       const html = response.data;
       const $ = cheerio.load(html);
       const completed_novels = [];
-      const pagination = parseInt($("li.last > a").attr("href").split("=")[1]);
+      let pagination = $(".pagination-container")
+        ?.find(".last > a")
+        .attr("href")
+        ?.split("page=")[1];
 
-      completed_novels.push({ pagination });
+      if (pagination === undefined) {
+        pagination = $(".pagination-container")
+          ?.find("ul.pagination-sm > li:nth-of-type(9)")
+          .text();
+      }
 
-      $(".list.list-novel > .row", html).each(function () {
-        const title = $(this).find(".novel-title").text();
-        const link = $(this).find("a").attr("href");
+      completed_novels.push({ pagination: parseInt(pagination) });
+
+      $(".list.list-truyen > .row", html).each(function () {
+        const title = $(this).find(".truyen-title").text();
+        const link = url + $(this).find(".truyen-title > a").attr("href");
         const author = $(this).find("span.author").text();
-        const img = $(this).find("img").attr("data-src");
-        const latest_chapter = $(this)
-          .find(".text-info")
-          .find("a")
-          .attr("href");
-        const latest_chapter_title = $(this)
-          .find(".text-info")
-          .find("a")
-          .attr("title");
+        const img = url + $(this).find("img").attr("src");
+        const count = $(this).find(".text-info").text();
 
         if (
           title === "" ||
           link === "" ||
           author === "" ||
           img === "" ||
-          latest_chapter === ""
+          count === ""
         ) {
           return;
         } else {
@@ -534,8 +558,7 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
             link,
             author,
             img,
-            latest_chapter,
-            latest_chapter_title,
+            count,
           });
         }
       });
@@ -545,12 +568,13 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
     .catch((err) => res.status(403).json({ error: err }));
 };
 
-// ? GET FIRST 30 CHAPTERS OF THE NOVEL
-export const GET_THIRTY_CHAPTERS = (req, res, next) => {
+// ? GET CHAPTERS OF THE NOVEL
+export const GET_NOVEL_CHAPTERS = (req, res, next) => {
   const { link } = req.body;
+  const { page } = req.params;
 
   axios
-    .get(link + "#tab-chapters-title", {
+    .get(link + "?page=" + page, {
       headers: {
         "User-Agent": agents[Math.floor(Math.random() * agents.length)],
         Accept:
@@ -563,11 +587,22 @@ export const GET_THIRTY_CHAPTERS = (req, res, next) => {
       const html = response.data;
       const $ = cheerio.load(html);
       const novel_chapters = [];
+      let pagination = $("#list-chapter")
+        ?.find(".last > a")
+        .attr("href")
+        ?.split("=")[1];
 
-      // ? 30 CHAPTERS ONLY
+      if (pagination === undefined) {
+        pagination = $("#list-chapter")
+          ?.find("ul.pagination-sm > li:nth-of-type(9) > a")
+          .text();
+      }
+
+      novel_chapters.push({ pagination: parseInt(pagination) });
+
       $(".list-chapter > li > a", html).each(function () {
         const chapter = $(this).text().replaceAll("\n", "");
-        const link = $(this).attr("href");
+        const link = url + $(this).attr("href");
 
         novel_chapters.push({
           chapter,

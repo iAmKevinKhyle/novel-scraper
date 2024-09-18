@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 
-const url = "https://novelbin.me/";
+const url = "https://novelfull.net";
 
 const agents = [
   "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Mobile Safari/537.36,gzip(gfe)",
@@ -27,11 +27,9 @@ export const GENRES = (req, res, next) => {
       const $ = cheerio.load(html);
       const genres = [];
 
-      $("#new-genre-select > option", html).each(function () {
-        const genre = $(this).attr("value");
-        const link =
-          "https://novelbin.me/novelbin-genres/" +
-          genre.replaceAll(" ", "-").toLowerCase();
+      $(".list-cat > .row a", html).each(function () {
+        const genre = $(this).text();
+        const link = url + $(this).attr("href");
 
         genres.push({
           genre,
@@ -50,7 +48,7 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
   const req_page = req.params.page;
 
   axios
-    .get(url + "novelbin-genres/" + req_genre + "?page=" + req_page, {
+    .get(url + "/genre/" + req_genre + "?page=" + req_page, {
       headers: {
         "User-Agent": agents[Math.floor(Math.random() * agents.length)],
         Accept:
@@ -63,15 +61,24 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
       const html = response.data;
       const $ = cheerio.load(html);
       const req_novels = [];
-      const pagination = parseInt($("li.last > a").attr("href").split("=")[1]);
+      let pagination = $(".pagination-container")
+        ?.find(".last > a")
+        .attr("href")
+        ?.split("page=")[1];
 
-      req_novels.push({ pagination });
+      if (pagination === undefined) {
+        pagination = $(".pagination-container")
+          ?.find("ul.pagination-sm > li:nth-of-type(9)")
+          .text();
+      }
 
-      $(".list.list-novel > .row", html).each(function () {
-        const title = $(this).find(".novel-title").text();
+      req_novels.push({ pagination: parseInt(pagination) });
+
+      $(".list.list-truyen > .row", html).each(function () {
+        const title = $(this).find(".truyen-title").text();
         const link = $(this).find("a").attr("href");
         const author = $(this).find("span.author").text();
-        const img = $(this).find("img").attr("data-src");
+        const img = $(this).find("img").attr("src");
         const latest_chapter = $(this)
           .find(".text-info")
           .find("a")
@@ -92,10 +99,10 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
         } else {
           req_novels.push({
             title,
-            link,
+            link: url + link,
             author,
-            img,
-            latest_chapter,
+            img: url + img,
+            latest_chapter: url + latest_chapter,
             latest_chapter_title,
           });
         }
