@@ -356,14 +356,26 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
       const html = response.data;
       const $ = cheerio.load(html);
       const chapter_contents = [];
-      let count = 0;
+      // let count = 0;
 
-      $("#chapter-content > p", html).each(function () {
-        count++;
+      $("#chapter-content > *", html).each(function () {
+        // count++;
 
-        chapter_contents.push({
-          p: $(this).text(),
-        });
+        const name = $(this).get(0).name;
+
+        if (name === "p") {
+          chapter_contents.push({
+            p: $(this).text(),
+          });
+        } else if (name === "ul") {
+          chapter_contents.push({
+            ul: $(this).prop("innerHTML"),
+          });
+        } else {
+          chapter_contents.push({
+            other: $(this).text(),
+          });
+        }
       });
 
       res.status(200).json(chapter_contents);
