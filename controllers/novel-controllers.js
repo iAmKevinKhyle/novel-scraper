@@ -362,19 +362,26 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
         // count++;
 
         const name = $(this).get(0).name;
+        const className = $(this).get(0).attribs.class;
 
         if (name === "p") {
           chapter_contents.push({
-            p: $(this).text(),
+            p: $(this).prop("innerHTML"),
           });
         } else if (name === "ul") {
           chapter_contents.push({
             ul: $(this).prop("innerHTML"),
           });
         } else {
-          chapter_contents.push({
-            other: $(this).text(),
-          });
+          if (className === "divContent") {
+            chapter_contents.push({
+              other: $(this).prop("innerHTML"),
+            });
+          } else {
+            chapter_contents.push({
+              other: $(this).text(),
+            });
+          }
         }
       });
 
