@@ -71,6 +71,15 @@ export const LATEST_NOVELS = (req, res, next) => {
           .find("a")
           .attr("href");
         const update_time = $(this).find(".col-time").text();
+        const label_hot = $(this).find(".col-title > .label-hot").get(0)
+          ? true
+          : false;
+        const label_full = $(this).find(".col-title > .label-full").get(0)
+          ? true
+          : false;
+        const label_new = $(this).find(".col-title > .label-new").get(0)
+          ? true
+          : false;
 
         latest.push({
           title,
@@ -79,6 +88,9 @@ export const LATEST_NOVELS = (req, res, next) => {
           latest_chapter,
           latest_chapter_link: url + latest_chapter_link,
           update_time,
+          label_hot,
+          label_full,
+          label_new,
         });
       });
 
@@ -173,6 +185,9 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
           .find(".text-info")
           .find("a")
           .attr("title");
+        const label_hot = $(this).find(".label-hot").get(0) ? true : false;
+        const label_full = $(this).find(".label-full").get(0) ? true : false;
+        const label_new = $(this).find(".label-new").get(0) ? true : false;
 
         if (
           title === "" ||
@@ -190,6 +205,9 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
             img: url + img,
             latest_chapter: url + latest_chapter,
             latest_chapter_title,
+            label_hot,
+            label_full,
+            label_new,
           });
         }
       });
@@ -247,10 +265,18 @@ export const GET_NOVEL_DESC = (req, res, next) => {
             .first()
             .attr("href");
 
+        let rating = $(this)
+          .find(".desc > .small")
+          .text()
+          .split(/[/\s]+/);
+        rating = rating.filter((el) => !isNaN(parseFloat(el)));
+        rating = rating.map((el) => parseFloat(el));
+
         novel_description.push({
           id: "",
           img,
           title,
+          rating,
           attr: [],
           description,
           first_chapter_title,
@@ -433,6 +459,9 @@ export const GET_ALL_HOT_NOVELS = (req, res, next) => {
           .find(".text-info")
           .find("a")
           .attr("title");
+        const label_hot = $(this).find(".label-hot").get(0) ? true : false;
+        const label_full = $(this).find(".label-full").get(0) ? true : false;
+        const label_new = $(this).find(".label-new").get(0) ? true : false;
 
         if (
           title === "" ||
@@ -450,6 +479,9 @@ export const GET_ALL_HOT_NOVELS = (req, res, next) => {
             img,
             latest_chapter,
             latest_chapter_title,
+            label_hot,
+            label_full,
+            label_new,
           });
         }
       });
@@ -500,6 +532,9 @@ export const GET_ALL_LATEST_NOVELS = (req, res, next) => {
           .find(".text-info")
           .find("a")
           .attr("title");
+        const label_hot = $(this).find(".label-hot").get(0) ? true : false;
+        const label_full = $(this).find(".label-full").get(0) ? true : false;
+        const label_new = $(this).find(".label-new").get(0) ? true : false;
 
         if (
           title === "" ||
@@ -517,6 +552,9 @@ export const GET_ALL_LATEST_NOVELS = (req, res, next) => {
             img,
             latest_chapter,
             latest_chapter_title,
+            label_hot,
+            label_full,
+            label_new,
           });
         }
       });
@@ -562,6 +600,9 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
         const author = $(this).find("span.author").text();
         const img = url + $(this).find("img").attr("src");
         const count = $(this).find(".text-info").text();
+        const label_hot = $(this).find(".label-hot").get(0) ? true : false;
+        const label_full = $(this).find(".label-full").get(0) ? true : false;
+        const label_new = $(this).find(".label-new").get(0) ? true : false;
 
         if (
           title === "" ||
@@ -578,6 +619,9 @@ export const GET_ALL_COMPLETED_NOVELS = (req, res, next) => {
             author,
             img,
             count,
+            label_hot,
+            label_full,
+            label_new,
           });
         }
       });

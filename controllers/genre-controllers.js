@@ -87,6 +87,9 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
           .find(".text-info")
           .find("a")
           .attr("title");
+        const label_hot = $(this).find(".label-hot").get(0) ? true : false;
+        const label_full = $(this).find(".label-full").get(0) ? true : false;
+        const label_new = $(this).find(".label-new").get(0) ? true : false;
 
         if (
           title === "" ||
@@ -104,6 +107,9 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
             img: url + img,
             latest_chapter: url + latest_chapter,
             latest_chapter_title,
+            label_hot,
+            label_full,
+            label_new,
           });
         }
       });
