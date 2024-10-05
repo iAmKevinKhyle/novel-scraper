@@ -168,6 +168,18 @@ export const GET_NOVEL_BY_KEYWORDS = (req, res, next) => {
         pagination = $(".pagination-container")
           ?.find("ul.pagination-sm > li:nth-of-type(9)")
           .text();
+
+        if (isNaN(parseInt(pagination))) {
+          for (let i = 9; i > 0; i--) {
+            pagination = $(".pagination-container")
+              ?.find(`ul.pagination-sm > li:nth-of-type(${i})`)
+              .text();
+
+            if (parseInt(pagination) >= 0) {
+              break;
+            }
+          }
+        }
       }
 
       search_req.push({ pagination: parseInt(pagination) });
