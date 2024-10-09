@@ -70,6 +70,18 @@ export const GET_NOVEL_WITH_THIS_GENRE = (req, res, next) => {
         pagination = $(".pagination-container")
           ?.find("ul.pagination-sm > li:nth-of-type(9)")
           .text();
+
+        if (isNaN(parseInt(pagination))) {
+          for (let i = 9; i > 0; i--) {
+            pagination = $(".pagination-container")
+              ?.find(`ul.pagination-sm > li:nth-of-type(${i})`)
+              .text();
+
+            if (parseInt(pagination) >= 0) {
+              break;
+            }
+          }
+        }
       }
 
       req_novels.push({ pagination: parseInt(pagination) });
