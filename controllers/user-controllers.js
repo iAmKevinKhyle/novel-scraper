@@ -211,7 +211,7 @@ export const UpdateUserReadingHistory = async (req, res, next) => {
       const chapter = reading.documents[reading.total - 1].chapter;
 
       // ? if greater than 5, delete history after that
-      if (reading.total > 5) {
+      if (reading.total >= 5) {
         reading.documents.forEach(async (item, i) => {
           const max = reading.documents.length - 5;
 
