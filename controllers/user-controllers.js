@@ -210,6 +210,23 @@ export const UpdateUserReadingHistory = async (req, res, next) => {
     if (reading.total > 0) {
       const chapter = reading.documents[reading.total - 1].chapter;
 
+      // ? if greater than 5, delete history after that
+      if (reading.total > 5) {
+        reading.documents.forEach(async (item, i) => {
+          const max = reading.documents.length - 5;
+
+          if (i + 1 <= max) {
+            const id = item.$id;
+
+            await databases.deleteDocument(
+              "NovelJunkyard",
+              "670f953800359d6d6c55",
+              id
+            );
+          }
+        });
+      }
+
       if (history.chapter !== chapter) {
         await databases.createDocument(
           "NovelJunkyard",
