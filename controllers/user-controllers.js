@@ -215,7 +215,7 @@ export const UpdateUserReadingHistory = async (req, res, next) => {
         reading.documents.forEach(async (item, i) => {
           const max = reading.documents.length - 5;
 
-          if (i + 1 <= max) {
+          if (i <= max) {
             const id = item.$id;
 
             await databases.deleteDocument(
