@@ -147,8 +147,6 @@ export const GetChapterListPageOnBookmark = async (req, res, next) => {
       .status(404)
       .json({ page: 1, text: `No Bookmark (${novel_title}) Found!` });
   } catch (error) {
-    console.log(error);
-
     res.status(error.code).json(error);
   }
 };
@@ -255,7 +253,6 @@ export const UpdateUserReadingHistory = async (req, res, next) => {
 
     return res.status(201).json("Updated!");
   } catch (error) {
-    console.log(error);
     res.status(error.code).json(error);
   }
 };

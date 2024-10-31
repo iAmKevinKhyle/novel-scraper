@@ -401,7 +401,6 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
 
         const name = $(this).get(0).name;
         const className = $(this).get(0).attribs.class;
-        console.log(className);
 
         if (name === "p") {
           chapter_contents.push({
