@@ -151,6 +151,38 @@ export const GetChapterListPageOnBookmark = async (req, res, next) => {
   }
 };
 
+export const GetUserReadingHistory = async (req, res, next) => {
+  const user_id = req.params.id;
+
+  try {
+    const response = await databases.listDocuments(
+      "NovelJunkyard",
+      "670f5ba60023916b8ad9",
+      [Query.equal("user", user_id)]
+    );
+
+    const docs_id = [];
+
+    if (response.total > 0) {
+      response.documents.forEach((doc) => {
+        docs_id.push(doc.$id);
+      });
+
+      const reading = await databases.listDocuments(
+        "NovelJunkyard",
+        "670f953800359d6d6c55",
+        [Query.equal("reading", [...docs_id]), Query.orderDesc()]
+      );
+
+      return res.status(200).json({ reading: reading.documents });
+    }
+
+    res.status(404).json({ text: `No Reading History Found!` });
+  } catch (error) {
+    res.status(error.code).json(error);
+  }
+};
+
 export const UpdateUserReading = async (req, res, next) => {
   const { user_id, novel_title, data } = req.body;
 

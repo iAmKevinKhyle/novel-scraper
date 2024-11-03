@@ -6,6 +6,7 @@ import {
   GetAllUsernames,
   GetChapterListPageOnBookmark,
   GetOneUser,
+  GetUserReadingHistory,
   LogInUserAccount,
   UpdateUserBookmark,
   UpdateUserReading,
@@ -21,6 +22,7 @@ userRouter.delete("/bookmark/delete", DeleteUserBookmark);
 userRouter.post("/bookmark/page", GetChapterListPageOnBookmark);
 userRouter.post("/reading", UpdateUserReading);
 userRouter.post("/reading/history", UpdateUserReadingHistory);
+userRouter.get("/reading/history/:id", GetUserReadingHistory);
 userRouter.delete("/reading/history/delete", DeleteUserReadingHistory);
 userRouter.get("/all", GetAllUsernames);
 userRouter.get("/:id", GetOneUser);
