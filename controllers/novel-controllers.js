@@ -393,13 +393,14 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
-      const chapter_contents = [];
+      let chapter_contents = [];
       // let count = 0;
 
       $("#chapter-content > *", html).each(function () {
         // count++;
 
         const name = $(this).get(0).name;
+        const type = $(this).get(0).next;
         const className = $(this).get(0).attribs.class;
 
         if (name === "p") {
@@ -420,6 +421,24 @@ export const GET_CHAPTER_CONTENTS = (req, res, next) => {
               other: $(this).prop("innerHTML"),
             });
           }
+        }
+
+        // check if the element has sibling that has no name/tag/element (text only)
+        if (type?.type === "text") {
+          do {
+            chapter_contents.push({
+              p: $(this).get(0).next?.data,
+            });
+          } while (type?.next?.type === "text");
+        }
+      });
+
+      // clear empty elements
+      chapter_contents = chapter_contents.filter((element, i) => {
+        const value = Object.values(element)[0];
+
+        if (value !== "") {
+          return element;
         }
       });
 
